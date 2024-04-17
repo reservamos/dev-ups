@@ -1,5 +1,25 @@
 import turtle
 
+# Constants
+WINDOW_WIDTH = 600
+WINDOW_HEIGHT = 600
+PADDLE_A_START_X = -250
+PADDLE_B_START_X = 250
+PADDLE_START_Y = 0
+PADDLE_MOVE_DISTANCE = 20
+BALL_START_DX = 5.0
+BALL_START_DY = -5.0
+SCORE_DISPLAY_X = 0
+SCORE_DISPLAY_Y = 260
+FONT = ("Courier", 24, "normal")
+BALL_BORDER_TOP = 290
+BALL_BORDER_BOTTOM = -290
+BALL_BORDER_RIGHT = 390
+BALL_BORDER_LEFT = -390
+PADDLE_COLLISION_DISTANCE = 50
+PADDLE_EDGE_RIGHT = 240
+PADDLE_EDGE_LEFT = -240
+
 class PingPongGame:
     """
     A class to represent a Ping Pong game using the turtle graphics library.
@@ -22,10 +42,10 @@ class PingPongGame:
         self.window = turtle.Screen()
         self.window.title("Ping Pong")
         self.window.bgcolor("black")
-        self.window.setup(width=600, height=600)
+        self.window.setup(width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
 
-        self.paddle_a = self.create_paddle(-250, 0)
-        self.paddle_b = self.create_paddle(250, 0)
+        self.paddle_a = self.create_paddle(PADDLE_A_START_X, PADDLE_START_Y)
+        self.paddle_b = self.create_paddle(PADDLE_B_START_X, PADDLE_START_Y)
         self.ball = self.create_ball()
         self.score_a = 0
         self.score_b = 0
@@ -72,8 +92,8 @@ class PingPongGame:
         ball.color("white")
         ball.penup()
         ball.goto(0, 0)
-        ball.dx = 5.0
-        ball.dy = -5.0
+        ball.dx = BALL_START_DX
+        ball.dy = BALL_START_DY
         return ball
 
     def create_score_display(self):
@@ -88,8 +108,8 @@ class PingPongGame:
         score_display.color("white")
         score_display.penup()
         score_display.hideturtle()
-        score_display.goto(0, 260)
-        score_display.write("Player A: 0  Player B: 0", align="center", font=("Courier", 24, "normal"))
+        score_display.goto(SCORE_DISPLAY_X, SCORE_DISPLAY_Y)
+        score_display.write("Player A: 0  Player B: 0", align="center", font=FONT)
         return score_display
 
     def paddle_a_up(self):
@@ -97,7 +117,7 @@ class PingPongGame:
         Moves paddle A up.
         """
         y = self.paddle_a.ycor()
-        y += 20
+        y += PADDLE_MOVE_DISTANCE
         self.paddle_a.sety(y)
 
     def paddle_a_down(self):
@@ -105,7 +125,7 @@ class PingPongGame:
         Moves paddle A down.
         """
         y = self.paddle_a.ycor()
-        y -= 20
+        y -= PADDLE_MOVE_DISTANCE
         self.paddle_a.sety(y)
 
     def paddle_b_up(self):
@@ -113,7 +133,7 @@ class PingPongGame:
         Moves paddle B up.
         """
         y = self.paddle_b.ycor()
-        y += 20
+        y += PADDLE_MOVE_DISTANCE
         self.paddle_b.sety(y)
 
     def paddle_b_down(self):
@@ -121,7 +141,7 @@ class PingPongGame:
         Moves paddle B down.
         """
         y = self.paddle_b.ycor()
-        y -= 20
+        y -= PADDLE_MOVE_DISTANCE
         self.paddle_b.sety(y)
 
     def game_loop(self):
@@ -136,33 +156,33 @@ class PingPongGame:
             self.ball.sety(self.ball.ycor() + self.ball.dy)
 
             # Border checking
-            if self.ball.ycor() > 290:
-                self.ball.sety(290)
+            if self.ball.ycor() > BALL_BORDER_TOP:
+                self.ball.sety(BALL_BORDER_TOP)
                 self.ball.dy *= -1
 
-            if self.ball.ycor() < -290:
-                self.ball.sety(-290)
+            if self.ball.ycor() < BALL_BORDER_BOTTOM:
+                self.ball.sety(BALL_BORDER_BOTTOM)
                 self.ball.dy *= -1
 
-            if self.ball.xcor() > 390:
+            if self.ball.xcor() > BALL_BORDER_RIGHT:
                 self.ball.goto(0, 0)
                 self.ball.dx *= -1
                 self.score_a += 1
                 self.update_score()
 
-            if self.ball.xcor() < -390:
+            if self.ball.xcor() < BALL_BORDER_LEFT:
                 self.ball.goto(0, 0)
                 self.ball.dx *= -1
                 self.score_b += 1
                 self.update_score()
 
             # Paddle collision
-            if (self.ball.xcor() > 240 and self.ball.xcor() < 250) and (self.ball.ycor() < self.paddle_b.ycor() + 50 and self.ball.ycor() > self.paddle_b.ycor() - 50):
-                self.ball.setx(240)
+            if (self.ball.xcor() > PADDLE_EDGE_RIGHT - 10 and self.ball.xcor() < PADDLE_EDGE_RIGHT) and (self.ball.ycor() < self.paddle_b.ycor() + PADDLE_COLLISION_DISTANCE and self.ball.ycor() > self.paddle_b.ycor() - PADDLE_COLLISION_DISTANCE):
+                self.ball.setx(PADDLE_EDGE_RIGHT)
                 self.ball.dx *= -1
 
-            if (self.ball.xcor() < -240 and self.ball.xcor() > -250) and (self.ball.ycor() < self.paddle_a.ycor() + 50 and self.ball.ycor() > self.paddle_a.ycor() - 50):
-                self.ball.setx(-240)
+            if (self.ball.xcor() < PADDLE_EDGE_LEFT + 10 and self.ball.xcor() > PADDLE_EDGE_LEFT) and (self.ball.ycor() < self.paddle_a.ycor() + PADDLE_COLLISION_DISTANCE and self.ball.ycor() > self.paddle_a.ycor() - PADDLE_COLLISION_DISTANCE):
+                self.ball.setx(PADDLE_EDGE_LEFT)
                 self.ball.dx *= -1
 
     def update_score(self):
@@ -170,7 +190,7 @@ class PingPongGame:
         Updates the score display after a player scores.
         """
         self.score_display.clear()
-        self.score_display.write(f"Player A: {self.score_a}  Player B: {self.score_b}", align="center", font=("Courier", 24, "normal"))
+        self.score_display.write(f"Player A: {self.score_a}  Player B: {self.score_b}", align="center", font=FONT)
 
 if __name__ == "__main__":
     game = PingPongGame()
