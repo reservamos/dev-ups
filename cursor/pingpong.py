@@ -1,3 +1,4 @@
+import time
 import turtle
 
 # Constants
@@ -57,6 +58,15 @@ class PingPongGame:
         self.window.onkeypress(self.paddle_a_down, "s")
         self.window.onkeypress(self.paddle_b_up, "Up")
         self.window.onkeypress(self.paddle_b_down, "Down")
+
+        self.last_move_time_a_front = time.time()  # Initialize last move time for paddle A
+        self.last_move_time_b_front = time.time()  # Initialize last move time for paddle B
+        
+        # The rest of the __init__ method remains unchanged
+        self.window.onkeypress(self.paddle_a_move_front, "d")  # Bind 'd' key for Player A to move front (right)
+        self.window.onkeypress(self.paddle_b_move_front, "Left")  # Bind 'Left arrow' key for Player B to move front (left)
+
+
 
         self.game_loop()
 
@@ -144,6 +154,38 @@ class PingPongGame:
         y = self.paddle_b.ycor()
         y -= PADDLE_MOVE_DISTANCE
         self.paddle_b.sety(y)
+
+    def paddle_a_move_front(self):
+        """
+        Moves paddle A to the right (front for Player A) if 5 seconds have passed since the last front move.
+        """
+        if time.time() - self.last_move_time_a_front >= 5:  # Check if 5 seconds have passed
+            x = self.paddle_a.xcor()
+            x += PADDLE_MOVE_DISTANCE  # Move to the right
+            if x < PADDLE_EDGE_RIGHT:  # Ensure paddle doesn't go beyond the game area
+                self.paddle_a.setx(x)
+            self.last_move_time_a_front = time.time()  # Update the last move time
+            self.window.ontimer(self.reset_paddle_positions, 1000)  # Reset positions after 1 second
+
+
+    def paddle_b_move_front(self):
+        """
+        Moves paddle B to the left (front for Player B) if 5 seconds have passed since the last front move.
+        """
+        if time.time() - self.last_move_time_b_front >= 5:  # Check if 5 seconds have passed
+            x = self.paddle_b.xcor()
+            x -= PADDLE_MOVE_DISTANCE  # Move to the left
+            if x > -PADDLE_EDGE_RIGHT:  # Ensure paddle doesn't go beyond the game area
+                self.paddle_b.setx(x)
+            self.last_move_time_b_front = time.time()  # Update the last move time
+            self.window.ontimer(self.reset_paddle_positions, 1000)  # Reset positions after 1 second
+
+    def reset_paddle_positions(self):
+        """
+        Resets the paddle positions to their starting points.
+        """
+        self.paddle_a.goto(PADDLE_A_START_X, PADDLE_START_Y)
+        self.paddle_b.goto(PADDLE_B_START_X, PADDLE_START_Y)
 
     def game_loop(self):
         """
