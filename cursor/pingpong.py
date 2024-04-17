@@ -1,7 +1,24 @@
 import turtle
 
 class PingPongGame:
+    """
+    A class to represent a Ping Pong game using the turtle graphics library.
+    
+    Attributes:
+        window (turtle.Screen): The game window.
+        paddle_a (turtle.Turtle): The left paddle.
+        paddle_b (turtle.Turtle): The right paddle.
+        ball (turtle.Turtle): The ball used in the game.
+        score_a (int): The score for player A.
+        score_b (int): The score for player B.
+        score_display (turtle.Turtle): The turtle object used to display the score.
+    """
+    
     def __init__(self):
+        """
+        Initializes the game, creating the window, paddles, ball, and score display.
+        Sets up keyboard bindings and starts the game loop.
+        """
         self.window = turtle.Screen()
         self.window.title("Ping Pong")
         self.window.bgcolor("black")
@@ -23,6 +40,16 @@ class PingPongGame:
         self.game_loop()
 
     def create_paddle(self, x, y):
+        """
+        Creates a paddle at the specified location.
+        
+        Parameters:
+            x (int): The x-coordinate of the paddle.
+            y (int): The y-coordinate of the paddle.
+            
+        Returns:
+            turtle.Turtle: The created paddle.
+        """
         paddle = turtle.Turtle()
         paddle.speed(0)
         paddle.shape("square")
@@ -33,6 +60,12 @@ class PingPongGame:
         return paddle
 
     def create_ball(self):
+        """
+        Creates the ball used in the game.
+        
+        Returns:
+            turtle.Turtle: The created ball.
+        """
         ball = turtle.Turtle()
         ball.speed(0)
         ball.shape("square")
@@ -44,6 +77,12 @@ class PingPongGame:
         return ball
 
     def create_score_display(self):
+        """
+        Creates the score display.
+        
+        Returns:
+            turtle.Turtle: The turtle object used for the score display.
+        """
         score_display = turtle.Turtle()
         score_display.speed(0)
         score_display.color("white")
@@ -54,26 +93,41 @@ class PingPongGame:
         return score_display
 
     def paddle_a_up(self):
+        """
+        Moves paddle A up.
+        """
         y = self.paddle_a.ycor()
         y += 20
         self.paddle_a.sety(y)
 
     def paddle_a_down(self):
+        """
+        Moves paddle A down.
+        """
         y = self.paddle_a.ycor()
         y -= 20
         self.paddle_a.sety(y)
 
     def paddle_b_up(self):
+        """
+        Moves paddle B up.
+        """
         y = self.paddle_b.ycor()
         y += 20
         self.paddle_b.sety(y)
 
     def paddle_b_down(self):
+        """
+        Moves paddle B down.
+        """
         y = self.paddle_b.ycor()
         y -= 20
         self.paddle_b.sety(y)
 
     def game_loop(self):
+        """
+        The main game loop. Handles ball movement, collision detection, and score updating.
+        """
         while True:
             self.window.update()
 
@@ -112,6 +166,9 @@ class PingPongGame:
                 self.ball.dx *= -1
 
     def update_score(self):
+        """
+        Updates the score display after a player scores.
+        """
         self.score_display.clear()
         self.score_display.write(f"Player A: {self.score_a}  Player B: {self.score_b}", align="center", font=("Courier", 24, "normal"))
 
