@@ -19,6 +19,7 @@ BALL_BORDER_LEFT = -390
 PADDLE_COLLISION_DISTANCE = 50
 PADDLE_EDGE_RIGHT = 240
 PADDLE_EDGE_LEFT = -240
+SPEED_INCREMENT_FACTOR = 1.3
 
 class PingPongGame:
     """
@@ -191,6 +192,10 @@ class PingPongGame:
         """
         self.score_display.clear()
         self.score_display.write(f"Player A: {self.score_a}  Player B: {self.score_b}", align="center", font=FONT)
+
+        # Increase ball speed by a certain percentage
+        self.ball.dx *= SPEED_INCREMENT_FACTOR
+        self.ball.dy *= SPEED_INCREMENT_FACTOR
 
 if __name__ == "__main__":
     game = PingPongGame()
